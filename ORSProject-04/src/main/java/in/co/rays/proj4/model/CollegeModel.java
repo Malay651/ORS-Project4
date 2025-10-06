@@ -38,6 +38,13 @@ public class CollegeModel {
 		
 	}
 	
+	/**
+	 * 
+	 * @param bean
+	 * @return
+	 * @throws ApplicationException
+	 * @throws sDuplicateRecordException
+	 */
 	public Long add(CollegeBean bean) throws ApplicationException, DuplicateRecordException   {
 		
 		Connection conn = null;

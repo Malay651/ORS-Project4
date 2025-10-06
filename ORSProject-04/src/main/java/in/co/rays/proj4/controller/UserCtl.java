@@ -29,13 +29,8 @@ import in.co.rays.proj4.util.ServletUtility;
 @WebServlet(name = "UserCtl", urlPatterns = { "/ctl/UserCtl" })
 public class UserCtl extends BaseCtl {
 
-	
-	private static Logger log = Logger.getLogger(CollegeCtl.class);
-	
-@Override
+	@Override
 	protected void preload(HttpServletRequest request) {
-	   
-	
 		RoleModel roleModel = new RoleModel();
 		try {
 			List<RoleBean> roleList = roleModel.list();
@@ -47,8 +42,6 @@ public class UserCtl extends BaseCtl {
 
 	@Override
 	protected boolean validate(HttpServletRequest request) {
-		
-		log.debug("UserCtl Method validate Started");
 
 		boolean pass = true;
 
@@ -127,16 +120,12 @@ public class UserCtl extends BaseCtl {
 			pass = false;
 		}
 
-		log.debug("UserCtl Method validate Ended");
-		
 		return pass;
 	}
 
 	@Override
 	protected BaseBean populateBean(HttpServletRequest request) {
 
-		log.debug("UserCtl Method populate Started");
-		
 		UserBean bean = new UserBean();
 
 		bean.setId(DataUtility.getLong(request.getParameter("id")));
@@ -152,16 +141,12 @@ public class UserCtl extends BaseCtl {
 
 		populateDTO(bean, request);
 
-		log.debug("UserCtl Method populate Ended");
-		
 		return bean;
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		log.debug("UserCtl Method doGet Started");
-		
 		long id = DataUtility.getLong(request.getParameter("id"));
 
 		UserModel model = new UserModel();
@@ -170,25 +155,19 @@ public class UserCtl extends BaseCtl {
 			try {
 				UserBean bean = model.findbypk(id);
 				ServletUtility.setBean(bean, request);
+				
 			} catch (ApplicationException e) {
 				e.printStackTrace();
 				ServletUtility.handleException(e, request, response);
 				return;
 			}
 		}
-		
 		ServletUtility.forward(getView(), request, response);
-		
-		log.debug("UserCtl Method doGet Ended");
-		
 	}
-	
-   @Override
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-	   log.debug("UserCtl Method dopost Started");
-	   
 		String op = DataUtility.getString(request.getParameter("operation"));
 
 		UserModel model = new UserModel();
@@ -198,11 +177,13 @@ public class UserCtl extends BaseCtl {
 		if (OP_SAVE.equalsIgnoreCase(op)) {
 			UserBean bean = (UserBean) populateBean(request);
 			try {
-				long pk = model.add(bean);
+				   model.add(bean);
+				
 				ServletUtility.setBean(bean, request);
 				ServletUtility.setSuccessMessage("User added successfully", request);
 				
 			} catch (DuplicateRecordException e) {
+				
 				ServletUtility.setBean(bean, request);
 				ServletUtility.setErrorMessage("Login Id already exists", request);
 				
@@ -217,10 +198,12 @@ public class UserCtl extends BaseCtl {
 				if (id > 0) {
 					model.update(bean);
 				}
+				
 				ServletUtility.setBean(bean, request);
 				ServletUtility.setSuccessMessage("User updated successfully", request);
 				
 			} catch (DuplicateRecordException e) {
+				
 				ServletUtility.setBean(bean, request);
 				ServletUtility.setErrorMessage("Login Id already exists", request);
 				
@@ -232,13 +215,12 @@ public class UserCtl extends BaseCtl {
 		} else if (OP_CANCEL.equalsIgnoreCase(op)) {
 			ServletUtility.redirect(ORSView.USER_LIST_CTL, request, response);
 			return;
+			
 		} else if (OP_RESET.equalsIgnoreCase(op)) {
 			ServletUtility.redirect(ORSView.USER_CTL, request, response);
 			return;
 		}
 		ServletUtility.forward(getView(), request, response);
-		
-		log.debug("UserCtl Method dopost Ended");
 	}
 
 	@Override

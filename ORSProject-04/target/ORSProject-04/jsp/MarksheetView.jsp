@@ -25,7 +25,7 @@
                     if (bean != null && bean.getId() > 0) {
                 %>Update<%
                     } else {
-                %>Add<%
+                %>ADD<%
                     }
                 %>
                 Marksheet
