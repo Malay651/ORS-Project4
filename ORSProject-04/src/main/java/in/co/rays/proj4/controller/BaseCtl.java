@@ -13,21 +13,21 @@ import in.co.rays.proj4.util.DataUtility;
 import in.co.rays.proj4.util.DataValidator;
 import in.co.rays.proj4.util.ServletUtility;
 
-/**
- * Base controller class of project. It contain (1) Generic operations (2)
- * Generic constants (3) Generic work flow
- * 
- * @author Proxy
- * @version 1.0
- * Copyright (c) Proxy
- */
-
 public abstract class BaseCtl extends HttpServlet {
 
-	/**
-	 * Default serial version ID
+	/*
+	 * Variables
+	 * 
+	 * UseCase :
+	 * 
+	 * 1. We have created constants for all the commonly used buttons
+	 * 
+	 * Advantage :
+	 * 
+	 * 1. this ways removes the chances of Spelling mistakes. 2. Make changes on one
+	 * place effect everywhere.
 	 */
-	private static final long serialVersionUID = 1L;
+
 	public static final String OP_SAVE = "Save";
 	public static final String OP_UPDATE = "Update";
 	public static final String OP_CANCEL = "Cancel";
@@ -43,51 +43,71 @@ public abstract class BaseCtl extends HttpServlet {
 	public static final String OP_RESET = "Reset";
 	public static final String OP_LOG_OUT = "Logout";
 
-	/**
-	 * Success message key constant
-	 */
 	public static final String MSG_SUCCESS = "success";
 
-	/**
-	 * Error message key constant
-	 */
 	public static final String MSG_ERROR = "error";
 
-	/**
-	 * Validates input data entered by User
+	/*
+	 * validate Methods
 	 * 
-	 * @param request
-	 * @return
+	 * UseCase :
+	 * 
+	 * 1. its use to validate input data entered by users. 2. Child class override
+	 * only when form is submitted. 3. HttpServletRequest request is used as
+	 * parameter because we get data from request also set data in the request. 4.
+	 * Return true When nothing to validate Or Data is validated else false.
+	 * 
+	 * Advantage :
+	 * 
+	 * 1. Also take care of the format of data entered by users. 2. Reduce
+	 * hard-coding of code
+	 * 
 	 */
+
 	protected boolean validate(HttpServletRequest request) {
 		return true;
 	}
 
-	/**
-	 * Loads list and other data required to display at HTML form
+	/*
+	 * preload method
 	 * 
-	 * @param request
+	 * UseCase :
+	 * 
+	 * 1. Loads the Pre-loaded data at the time of html form loading. 2.
+	 * HttpServletRequest request is used as parameter because we set data in the
+	 * request and needs nothing in return so used void as return type.
+	 * 
+	 * Advantage :
+	 * 
+	 * 1. its loads the data before page is loaded. 2. it give us ablity to get the
+	 * data dynamically(From the Database) as well as statically( inside the jsp
+	 * page ) 3. it use HTMLUtility String getList(String name, String selectedVal,
+	 * List list) method to set the data dynamically 4. it use HTMLUtility String
+	 * getList(String name, String selectedVal, HashMap<String, String> map) method
+	 * to set the data statically( inside the jsp page )
+	 * 
 	 */
+
 	protected void preload(HttpServletRequest request) {
 	}
 
-	/**
-	 * Populates bean object from request parameters
+	/*
+	 * populateBean
 	 * 
-	 * @param request
-	 * @return
+	 * UseCase :
+	 * 
+	 * 1. Get the data from request and set in BaseBean and return the BaseBean
+	 * object 2. When no data is available return null
+	 * 
+	 * Advantage :
+	 * 
+	 * 1.
 	 */
+
 	protected BaseBean populateBean(HttpServletRequest request) {
 		return null;
 	}
 
-	/**
-	 * Populates Generic attributes in DTO
-	 * 
-	 * @param dto
-	 * @param request
-	 * @return
-	 */
 	protected BaseBean populateDTO(BaseBean dto, HttpServletRequest request) {
 
 		String createdBy = request.getParameter("createdBy");
@@ -96,18 +116,13 @@ public abstract class BaseCtl extends HttpServlet {
 		UserBean userbean = (UserBean) request.getSession().getAttribute("user");
 
 		if (userbean == null) {
-			// If record is created without login
 			createdBy = "root";
 			modifiedBy = "root";
 		} else {
-
 			modifiedBy = userbean.getLogin();
-
-			// If record is created first time
 			if ("null".equalsIgnoreCase(createdBy) || DataValidator.isNull(createdBy)) {
 				createdBy = modifiedBy;
 			}
-
 		}
 
 		dto.setCreatedBy(createdBy);
@@ -126,41 +141,55 @@ public abstract class BaseCtl extends HttpServlet {
 		return dto;
 	}
 
+	/*
+	 * service method
+	 * 
+	 * UseCase :
+	 * 
+	 * 1. to perform some task everytime 2.
+	 * 
+	 * 
+	 * Advantage :
+	 * 
+	 * 1. Runs everytime when any Servlet called
+	 * 
+	 */
+
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
- System.out.println("in base ctl service");
-		// Load the preloaded data required to display at HTML form
+
 		preload(request);
 
 		String op = DataUtility.getString(request.getParameter("operation"));
-
-		// Check if operation is not DELETE, VIEW, CANCEL, RESET and not  NULL then
-		// perform input data validation
-
+		
 		if (DataValidator.isNotNull(op) && !OP_CANCEL.equalsIgnoreCase(op) && !OP_VIEW.equalsIgnoreCase(op)
 				&& !OP_DELETE.equalsIgnoreCase(op) && !OP_RESET.equalsIgnoreCase(op)) {
-			// Check validation, If fail then send back to page with error
-			// messages
 
 			if (!validate(request)) {
-				System.out.println("validate return");
 				BaseBean bean = (BaseBean) populateBean(request);
 				ServletUtility.setBean(bean, request);
 				ServletUtility.forward(getView(), request, response);
 				return;
 			}
 		}
-		
-		System.out.println("base ctl service" + request.getMethod());
 		super.service(request, response);
 	}
 
-	/**
-	 * Returns the VIEW page of this Controller
+	/*
+	 * getView
 	 * 
-	 * @return
+	 * UseCase :
+	 * 
+	 * 1. All Child class must override this method
+	 * 
+	 * 
+	 * Advantage :
+	 * 
+	 * 1. return name of CurrentView
+	 * 
 	 */
+
 	protected abstract String getView();
 
 }

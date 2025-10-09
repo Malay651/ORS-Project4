@@ -18,6 +18,10 @@ import in.co.rays.proj4.util.EmailMessage;
 import in.co.rays.proj4.util.EmailUtility;
 import in.co.rays.proj4.util.JDBCDataSource;
 
+/**
+ * @author ALL IS WELL
+ *
+ */
 public class UserModel {
 
 	public Integer nextpk() throws DatabaseException {

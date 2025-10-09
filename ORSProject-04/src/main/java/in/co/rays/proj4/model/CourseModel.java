@@ -12,6 +12,10 @@ import in.co.rays.proj4.exception.ApplicationException;
 import in.co.rays.proj4.exception.DuplicateRecordException;
 import in.co.rays.proj4.util.JDBCDataSource;
 
+/**
+ * @author ALL IS WELL
+ *
+ */
 public class CourseModel {
 
 	public Integer nextpk() {

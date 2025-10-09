@@ -1,3 +1,4 @@
+H:\proj4_Workspace\ORSProject-04\src\main\java\in\co\rays\proj4\controller\PatientCtl.java
 H:\proj4_Workspace\ORSProject-04\src\main\java\in\co\rays\proj4\controller\RoleCtl.java
 H:\proj4_Workspace\ORSProject-04\src\main\java\in\co\rays\proj4\controller\FacultyCtl.java
 H:\proj4_Workspace\ORSProject-04\src\main\java\in\co\rays\proj4\util\HTMLUtility.java
@@ -14,7 +15,9 @@ H:\proj4_Workspace\ORSProject-04\src\main\java\in\co\rays\proj4\controller\Subje
 H:\proj4_Workspace\ORSProject-04\src\main\java\in\co\rays\proj4\controller\MarksheetMeritListCtl.java
 H:\proj4_Workspace\ORSProject-04\src\main\java\in\co\rays\proj4\util\ServletUtility.java
 H:\proj4_Workspace\ORSProject-04\src\main\java\in\co\rays\proj4\controller\UserRegistrationCtl.java
+H:\proj4_Workspace\ORSProject-04\src\main\java\in\co\rays\proj4\model\PatientModel.java
 H:\proj4_Workspace\ORSProject-04\src\main\java\in\co\rays\proj4\controller\FrontController.java
+H:\proj4_Workspace\ORSProject-04\src\main\java\in\co\rays\proj4\controller\PatientListCtl.java
 H:\proj4_Workspace\ORSProject-04\src\main\java\in\co\rays\proj4\bean\SubjectBean.java
 H:\proj4_Workspace\ORSProject-04\src\main\java\in\co\rays\proj4\controller\ORSView.java
 H:\proj4_Workspace\ORSProject-04\src\main\java\in\co\rays\proj4\bean\CollegeBean.java
@@ -54,6 +57,7 @@ H:\proj4_Workspace\ORSProject-04\src\main\java\in\co\rays\proj4\bean\BaseBean.ja
 H:\proj4_Workspace\ORSProject-04\src\main\java\in\co\rays\proj4\controller\CollegeCtl.java
 H:\proj4_Workspace\ORSProject-04\src\main\java\in\co\rays\proj4\controller\CourseListCtl.java
 H:\proj4_Workspace\ORSProject-04\src\main\java\in\co\rays\proj4\util\EmailUtility.java
+H:\proj4_Workspace\ORSProject-04\src\main\java\in\co\rays\proj4\bean\PatientBean.java
 H:\proj4_Workspace\ORSProject-04\src\main\java\in\co\rays\proj4\bean\CourseBean.java
 H:\proj4_Workspace\ORSProject-04\src\main\java\in\co\rays\proj4\model\RoleModel.java
 H:\proj4_Workspace\ORSProject-04\src\main\java\in\co\rays\proj4\test\TestRoleModel.java
