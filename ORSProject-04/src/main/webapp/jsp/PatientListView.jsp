@@ -67,7 +67,9 @@
 						name="dateOfVisit" placeholder="Enter Date Of Visit"
 						value="<%=ServletUtility.getParameter("dateOfVisit", request)%>">&emsp;
 
+                        <label><b>Decease : </b></label> <%=HTMLUtility.getList("disease", String.valueOf(bean.getDisease()), diseaseMap)%>&emsp;
 
+                        
 						<input type="submit" name="operation" value="<%=PatientListCtl.OP_SEARCH%>"> &nbsp; 
 						<input type="submit" name="operation" value="<%=PatientListCtl.OP_RESET%>"></td>
 				</tr>

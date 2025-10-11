@@ -42,7 +42,7 @@ public class PatientListCtl extends BaseCtl {
 	Logger log = Logger.getLogger(PatientListCtl.class);
 
     /**
-     * Loads pre-populated data for Patient list page (e.g., unique deceases)
+     * Loads pre-populated data for Patient list page (e.g., unique diseases)
      * into the request scope.
      * 
      * @param request HttpServletRequest object
