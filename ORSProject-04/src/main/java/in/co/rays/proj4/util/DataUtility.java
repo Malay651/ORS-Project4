@@ -162,4 +162,9 @@ public class DataUtility {
 		System.out.println("Timestamp to long: " + getTimestamp(currentTimestamp));
 	}
 
+	public static double getdouble(String parameter) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }
