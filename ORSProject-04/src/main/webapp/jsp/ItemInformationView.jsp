@@ -75,7 +75,7 @@
 			<tr>
 				<th align="left">Purchase Date <span style="color:red">*</span></th>
 				<td>
-					<input type="text" id="udate" name="purchasedate"
+					<input type="text" id="itemDate" name="purchasedate"
 						placeholder="Select Purchase Date"
 						value="<%=DataUtility.getDateString(bean.getPurchasedate())%>">
 				</td>

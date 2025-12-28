@@ -12,6 +12,19 @@ $(document).ready(function() {
 	});
 });
 
+$(document).ready(function() {
+	var currentYear = new Date().getFullYear();
+
+	$("#itemDate").datepicker({
+		dateFormat : 'dd-mm-yy',
+		changeMonth : true,
+		changeYear : true,
+		yearRange : '1970:' + currentYear,
+		minDate : new Date(1970, 0, 1),
+		maxDate : new Date(currentYear, 11, 31)
+	});
+});
+
 $(function() {
 	var today = new Date();
 	var currentYear = today.getFullYear();

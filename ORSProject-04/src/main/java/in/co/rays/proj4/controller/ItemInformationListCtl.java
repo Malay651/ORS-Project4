@@ -1,156 +1,168 @@
+package in.co.rays.proj4.controller;
 
+import java.io.IOException;
+import java.util.List;
 
-	package in.co.rays.proj4.controller;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-	import java.io.IOException;
-	import java.util.List;
-
-	import javax.servlet.ServletException;
-	import javax.servlet.annotation.WebServlet;
-	import javax.servlet.http.HttpServletRequest;
-	import javax.servlet.http.HttpServletResponse;
-
-	import in.co.rays.proj4.bean.BaseBean;
+import in.co.rays.proj4.bean.BaseBean;
 import in.co.rays.proj4.bean.ItemInformationBean;
 import in.co.rays.proj4.exception.ApplicationException;
 import in.co.rays.proj4.model.ItemInformationModel;
-import in.co.rays.proj4.model.RoleModel;
-	import in.co.rays.proj4.model.UserModel;
-	import in.co.rays.proj4.util.DataUtility;
-	import in.co.rays.proj4.util.PropertyReader;
-	import in.co.rays.proj4.util.ServletUtility;
+import in.co.rays.proj4.util.DataUtility;
+import in.co.rays.proj4.util.PropertyReader;
+import in.co.rays.proj4.util.ServletUtility;
 
-	@WebServlet(name = "ItemInformationListCtl", urlPatterns = { "/ctl/ItemInformationListCtl" })
-	public class ItemInformationListCtl extends BaseCtl {
+@WebServlet(name = "ItemInformationListCtl",
+        urlPatterns = { "/ctl/ItemInformationListCtl" })
+public class ItemInformationListCtl extends BaseCtl {
 
+    /* ================= POPULATE BEAN ================= */
+    @Override
+    protected BaseBean populateBean(HttpServletRequest request) {
 
-		@Override
-		protected BaseBean populateBean(HttpServletRequest request) {
+        ItemInformationBean bean = new ItemInformationBean();
 
-			ItemInformationBean bean = new ItemInformationBean();
+        bean.setTitle(
+                DataUtility.getString(request.getParameter("title")));
+        bean.setPurchasedate(
+                DataUtility.getDate(request.getParameter("purchasedate")));
+        bean.setCategory(
+                DataUtility.getString(request.getParameter("category")));
 
-			bean.setTitle(DataUtility.getString(request.getParameter("title")));
-			bean.setPurchasedate(DataUtility.getDate(request.getParameter("purchasedate")));
-			bean.setCategory(DataUtility.getString(request.getParameter("category")));
+        return bean;
+    }
 
-			return bean;
+    /* ================= DO GET ================= */
+    @Override
+    protected void doGet(HttpServletRequest request,
+            HttpServletResponse response)
+            throws ServletException, IOException {
 
-		}
+        int pageNo = 1;
+        int pageSize =
+                DataUtility.getInt(PropertyReader.getValue("page.size"));
 
-		protected void doGet(HttpServletRequest request, HttpServletResponse response)
-				throws ServletException, IOException {
+        ItemInformationBean bean =
+                (ItemInformationBean) populateBean(request);
+        ItemInformationModel model = new ItemInformationModel();
 
-			int pageNo = 1;
-			int pageSize = DataUtility.getInt(PropertyReader.getValue("page.size"));
+        try {
+            List<ItemInformationBean> list =
+                    model.search(bean, pageNo, pageSize);
+            List<ItemInformationBean> next =
+                    model.search(bean, pageNo + 1, pageSize);
 
-			ItemInformationBean bean = (ItemInformationBean) populateBean(request);
-			ItemInformationModel model = new ItemInformationModel();
+            if (list == null || list.isEmpty()) {
+                ServletUtility.setErrorMessage(
+                        "No record found", request);
+            }
 
-			try {
-				List<ItemInformationBean> list = model.search(bean, pageNo, pageSize);
-				List<ItemInformationBean> next = model.search(bean, pageNo + 1, pageSize);
+            ServletUtility.setList(list, request);
+            ServletUtility.setPageNo(pageNo, request);
+            ServletUtility.setPageSize(pageSize, request);
+            ServletUtility.setBean(bean, request);
+            request.setAttribute("nextListSize", next.size());
 
-				if (list == null || list.isEmpty()) {
-					ServletUtility.setErrorMessage("No record found", request);
-				}
+            ServletUtility.forward(getView(), request, response);
 
-				ServletUtility.setList(list, request);
-				ServletUtility.setPageNo(pageNo, request);
-				ServletUtility.setPageSize(pageSize, request);
-				ServletUtility.setBean(bean, request);
-				request.setAttribute("nextListSize", next.size());
+        } catch (ApplicationException e) {
+            ServletUtility.handleException(e, request, response);
+            return;
+        }
+    }
 
-				ServletUtility.forward(getView(), request, response);
+    /* ================= DO POST ================= */
+    @Override
+    protected void doPost(HttpServletRequest request,
+            HttpServletResponse response)
+            throws ServletException, IOException {
 
-			} catch (ApplicationException e) {
-				e.printStackTrace();
-				ServletUtility.handleException(e, request, response);
-				return;
-			}
-		}
+        int pageNo = DataUtility.getInt(request.getParameter("pageNo"));
+        int pageSize = DataUtility.getInt(request.getParameter("pageSize"));
 
-		@Override
-		protected void doPost(HttpServletRequest request, HttpServletResponse response)
-				throws ServletException, IOException {
+        pageNo = (pageNo == 0) ? 1 : pageNo;
+        pageSize = (pageSize == 0)
+                ? DataUtility.getInt(
+                        PropertyReader.getValue("page.size"))
+                : pageSize;
 
-			List list = null;
-			List next = null;
+        ItemInformationBean bean =
+                (ItemInformationBean) populateBean(request);
+        ItemInformationModel model = new ItemInformationModel();
 
-			int pageNo = DataUtility.getInt(request.getParameter("pageNo"));
-			int pageSize = DataUtility.getInt(request.getParameter("pageSize"));
+        String op =
+                DataUtility.getString(request.getParameter("operation"));
+        String[] ids = request.getParameterValues("ids");
 
-			pageNo = (pageNo == 0) ? 1 : pageNo;
-			pageSize = (pageSize == 0) ? DataUtility.getInt(PropertyReader.getValue("page.size")) : pageSize;
+        try {
 
-			ItemInformationBean bean = (ItemInformationBean) populateBean(request);
-			ItemInformationModel model = new ItemInformationModel();
+            if (OP_SEARCH.equalsIgnoreCase(op)) {
+                pageNo = 1;
 
-			String op = DataUtility.getString(request.getParameter("operation"));
-			String[] ids = request.getParameterValues("ids");
+            } else if (OP_NEXT.equalsIgnoreCase(op)) {
+                pageNo++;
 
-			try {
+            } else if (OP_PREVIOUS.equalsIgnoreCase(op) && pageNo > 1) {
+                pageNo--;
 
-				if (OP_SEARCH.equalsIgnoreCase(op) || "Next".equalsIgnoreCase(op) || "Previous".equalsIgnoreCase(op)) {
+            } else if (OP_NEW.equalsIgnoreCase(op)) {
+                ServletUtility.redirect(
+                        ORSView.ITEM_INFORMATION_CTL,
+                        request, response);
+                return;
 
-					if (OP_SEARCH.equalsIgnoreCase(op)) {
-						pageNo = 1;
-					} else if (OP_NEXT.equalsIgnoreCase(op)) {
-						pageNo++;
-					} else if (OP_PREVIOUS.equalsIgnoreCase(op) && pageNo > 1) {
-						pageNo--;
-					}
+            } else if (OP_DELETE.equalsIgnoreCase(op)) {
 
-				} else if (OP_NEW.equalsIgnoreCase(op)) {
-					ServletUtility.redirect(ORSView.ITEM_INFORMATION_CTL, request, response);
-					return;
-					
-				} else if (OP_DELETE.equalsIgnoreCase(op)) {
-					pageNo = 1;
-					if (ids != null && ids.length > 0) {
-						ItemInformationBean deletebean = new ItemInformationBean();
-						for (String id : ids) {
-							deletebean.setId(DataUtility.getInt(id));
-							model.Delete(deletebean);
-							ServletUtility.setSuccessMessage("User deleted successfully", request);
-						}
-					} else {
-						ServletUtility.setErrorMessage("Select at least one record", request);
-					}
-					
-				} else if (OP_RESET.equalsIgnoreCase(op)) {
-					ServletUtility.redirect(ORSView.ITEM_INFORMATION_LIST_CTL, request, response);
-					return;
-					
-				} else if (OP_BACK.equalsIgnoreCase(op)) {
-					ServletUtility.redirect(ORSView.ITEM_INFORMATION_LIST_CTL, request, response);
-					return;
-				}
+                if (ids != null && ids.length > 0) {
+                    for (String id : ids) {
+                        model.delete(DataUtility.getLong(id));
+                    }
+                    ServletUtility.setSuccessMessage(
+                            "Item deleted successfully", request);
+                } else {
+                    ServletUtility.setErrorMessage(
+                            "Select at least one record", request);
+                }
 
-				list = model.search(bean, pageNo, pageSize);
-				next = model.search(bean, pageNo + 1, pageSize);
+            } else if (OP_RESET.equalsIgnoreCase(op)
+                    || OP_BACK.equalsIgnoreCase(op)) {
+                ServletUtility.redirect(
+                        ORSView.ITEM_INFORMATION_LIST_CTL,
+                        request, response);
+                return;
+            }
 
-				if (list == null || list.size() == 0) {
-					ServletUtility.setErrorMessage("No record found ", request);
-				}
+            List<ItemInformationBean> list =
+                    model.search(bean, pageNo, pageSize);
+            List<ItemInformationBean> next =
+                    model.search(bean, pageNo + 1, pageSize);
 
-				ServletUtility.setList(list, request);
-				ServletUtility.setPageNo(pageNo, request);
-				ServletUtility.setPageSize(pageSize, request);
-				ServletUtility.setBean(bean, request);
-				request.setAttribute("nextListSize", next.size());
+            if (list == null || list.isEmpty()) {
+                ServletUtility.setErrorMessage(
+                        "No record found", request);
+            }
 
-				ServletUtility.forward(getView(), request, response);
+            ServletUtility.setList(list, request);
+            ServletUtility.setPageNo(pageNo, request);
+            ServletUtility.setPageSize(pageSize, request);
+            ServletUtility.setBean(bean, request);
+            request.setAttribute("nextListSize", next.size());
 
-			} catch (ApplicationException e) {
-				e.printStackTrace();
-				ServletUtility.handleException(e, request, response);
-				return;
-			}
-		}
+            ServletUtility.forward(getView(), request, response);
 
-		@Override
-		protected String getView() {
-			return ORSView.ITEM_INFORMATION_LIST_CTL;
-		}
-	}
+        } catch (ApplicationException e) {
+            ServletUtility.handleException(e, request, response);
+            return;
+        }
+    }
 
+    /* ================= VIEW ================= */
+    @Override
+    protected String getView() {
+        return ORSView.ITEM_INFORMATION_LIST_VIEW;
+    }
+}
