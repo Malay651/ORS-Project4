@@ -13,11 +13,9 @@
 		<%@ include file="Header.jsp"%>
 		<br> <br> <br>
 		<h1 align="center">
-<<<<<<< HEAD
+
 			<font size="10px" color="navy">Welcome to ORS</font>
-=======
-			<font size="10px" color="navy">Welcome to ORS 26/12/2025</font>
->>>>>>> 9a23a65168fec9d17ca8297770a5a200011b7e82
+
 		</h1>
 
 
