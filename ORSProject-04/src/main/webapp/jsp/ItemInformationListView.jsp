@@ -21,6 +21,15 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Item Information List</title>
+<style>
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+</style>
+
 
 <script>
 function toggle(source) {
@@ -56,9 +65,9 @@ function toggle(source) {
 
     int index = ((pageNo - 1) * pageSize) + 1;
 
-    int nextListSize  = DataUtility.getInt(request.getAttribute("nextListSize").toString());
-   
+    int nextListSize = DataUtility.getInt(request.getAttribute("nextListSize").toString());
 
+    @SuppressWarnings("unchecked")
     List<ItemInformationBean> list =
         (List<ItemInformationBean>) ServletUtility.getList(request);
 %>
@@ -125,7 +134,7 @@ if (list != null && !list.isEmpty()) {
 <td align="center"><%=bean.getTitle()%></td>
 <td align="center"><%=bean.getOverview()%></td>
 <td align="center"><%=bean.getCost()%></td>
-<td align="center"><%=bean.getPurchasedate()!=null?sdf.format(bean.getPurchasedate()):""%></td>
+<td align="center"><%=bean.getPurchasedate() != null ? sdf.format(bean.getPurchasedate()) : ""%></td>
 <td align="center"><%=bean.getCategory()%></td>
 <td align="center">
 <a href="<%=ORSView.ITEM_INFORMATION_CTL%>?id=<%=bean.getId()%>">Edit</a>
@@ -173,9 +182,10 @@ if (list != null && !list.isEmpty()) {
 </table>
 
 </form>
+
 </div>
 
-<%@ include file="Footer.jsp"%>
+<footer><%@ include file="Footer.jsp"%></footer>
 
 </body>
 </html>
