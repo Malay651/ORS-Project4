@@ -1,0 +1,6 @@
+ORSProject-04/src/main/java/in/co/rays/proj4/bean/ItemInformationBean.java
+ORSProject-04/src/main/java/in/co/rays/proj4/controller/ItemInformationCtl.java
+ORSProject-04/src/main/java/in/co/rays/proj4/controller/ItemInformationListCtl.java
+ORSProject-04/src/main/java/in/co/rays/proj4/model/ItemInformationModel.java
+ORSProject-04/src/main/webapp/jsp/ItemInformationListView.jsp
+ORSProject-04/src/main/webapp/jsp/ItemInformationView.jsp
