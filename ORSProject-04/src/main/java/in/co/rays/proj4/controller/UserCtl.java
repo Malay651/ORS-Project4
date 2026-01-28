@@ -1,6 +1,7 @@
  package in.co.rays.proj4.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -36,7 +37,7 @@ public class UserCtl extends BaseCtl {
 			List<RoleBean> roleList = roleModel.list();
 			request.setAttribute("roleList", roleList);
 		} catch (ApplicationException e) {
-			e.printStackTrace();
+			request.setAttribute("roleList", new ArrayList());
 		}
 	}
 
@@ -189,7 +190,7 @@ public class UserCtl extends BaseCtl {
 				
 			} catch (ApplicationException e) {
 				e.printStackTrace();
-				ServletUtility.handleException(e, request, response);
+			   ServletUtility.handleExceptionDB(getView(), request, response);
 				return;
 			}
 		} else if (OP_UPDATE.equalsIgnoreCase(op)) {
